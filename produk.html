@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Produk — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <h1>🍽️ Menu Kami</h1>
+  <p>Pilihan risol & donat homemade, dibuat fresh setiap hari</p>
+</div>
+
+<div class="section" style="padding-top:32px;">
+
+  <!-- Toolbar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:18px;">
+    <div style="position:relative;flex:1;min-width:200px;max-width:320px;">
+      <span style="position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;">🔍</span>
+      <input type="text" id="searchInput" placeholder="Cari produk..."
+        style="padding-left:40px;border-radius:99px;"
+        oninput="applyFilter()">
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-size:13px;font-weight:700;color:var(--muted);white-space:nowrap;">Urutkan:</span>
+      <select id="sortSel" onchange="applyFilter()" style="width:auto;padding:8px 12px;font-size:13px;border-radius:99px;">
+        <option value="default">Default</option>
+        <option value="asc">Harga Termurah</option>
+        <option value="desc">Harga Termahal</option>
+        <option value="name">Nama A–Z</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('semua',this)">🌟 Semua</button>
+    <button class="filter-btn" onclick="setFilter('risol',this)">🥟 Risol</button>
+    <button class="filter-btn" onclick="setFilter('donat',this)">🍩 Donat</button>
+    <button class="filter-btn" onclick="setFilter('paket',this)">📦 Paket</button>
+    <button class="filter-btn" onclick="setFilter('bestseller',this)">🔥 Best Seller</button>
+  </div>
+
+  <div style="font-size:14px;color:var(--muted);margin-bottom:18px;">
+    Menampilkan <strong id="prodCount" style="color:var(--primary);">0</strong> produk
+  </div>
+
+  <div class="products-grid" id="prodGrid"></div>
+
+  <div id="emptyState" style="display:none;" class="empty-state">
+    <div class="ei">🔍</div>
+    <p>Produk tidak ditemukan.<br>Coba kata kunci lain atau reset filter.</p>
+    <button class="btn btn-primary" style="margin-top:16px;" onclick="resetFilter()">Reset Filter</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;">🍩 Dapur Mama Arya</div>
+        <p>UMKM kuliner rumahan terbaik di Kepulauan Riau.</p>
+      </div>
+      <div class="footer-col"><h4>Halaman</h4>
+        <a href="index.html">Beranda</a><a href="tentang.html">Tentang</a>
+        <a href="ulasan.html">Ulasan</a><a href="kontak.html">Kontak</a>
+      </div>
+      <div class="footer-col"><h4>Kontak</h4>
+        <a href="#">📱 0812-3456-7890</a>
+        <a href="#">🕐 Buka 07.00–20.00</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Dapur Mama Arya · Dibuat dengan ❤️ di Tanjung Pinang</div>
+  </div>
+</footer>
+<a class="wa-float" href="https://wa.me/6281234567890" target="_blank">💬 WhatsApp</a>
+
+<script src="auth.js"></script>
+<script src="data.js"></script>
+<script src="navbar.js"></script>
+<script>
+renderNavbar('produk');
+renderCartSidebar();
+
+var _filter = 'semua';
+
+// Baca URL param ?cat=
+var urlCat = new URLSearchParams(window.location.search).get('cat');
+if (urlCat) {
+  _filter = urlCat;
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    var txt = b.textContent.toLowerCase();
+    if (urlCat === 'risol' && txt.includes('risol')) { b.classList.add('active'); }
+    else if (urlCat === 'donat' && txt.includes('donat')) { b.classList.add('active'); }
+    else if (urlCat === 'paket' && txt.includes('paket')) { b.classList.add('active'); }
+    else if (urlCat === 'bestseller' && txt.includes('best')) { b.classList.add('active'); }
+    else if (urlCat !== 'semua') b.classList.remove('active');
+  });
+  if (urlCat !== 'semua') document.querySelector('.filter-btn').classList.remove('active');
+}
+
+function setFilter(f, btn) {
+  _filter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  applyFilter();
+}
+
+function resetFilter() {
+  _filter = 'semua';
+  document.querySelectorAll('.filter-btn').forEach(function(b, i) { b.classList.toggle('active', i === 0); });
+  document.getElementById('searchInput').value = '';
+  document.getElementById('sortSel').value = 'default';
+  applyFilter();
+}
+
+function applyFilter() {
+  var q = document.getElementById('searchInput').value.toLowerCase().trim();
+  var sort = document.getElementById('sortSel').value;
+  var prods = getActiveProducts();
+
+  if (_filter === 'risol') prods = prods.filter(function(p) { return p.name.toLowerCase().includes('risol'); });
+  else if (_filter === 'donat') prods = prods.filter(function(p) { return p.name.toLowerCase().includes('donat'); });
+  else if (_filter === 'paket') prods = prods.filter(function(p) { return p.unit === 'per paket' || p.unit === 'per box'; });
+  else if (_filter === 'bestseller') prods = prods.filter(function(p) { return p.badge === 'Best Seller' || p.badge === 'Terlaris'; });
+
+  if (q) prods = prods.filter(function(p) { return p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q); });
+
+  if (sort === 'asc') prods.sort(function(a, b) { return a.price - b.price; });
+  else if (sort === 'desc') prods.sort(function(a, b) { return b.price - a.price; });
+  else if (sort === 'name') prods.sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+  renderProds(prods);
+}
+
+function renderProds(prods) {
+  document.getElementById('prodCount').textContent = prods.length;
+  var empty = document.getElementById('emptyState');
+  var grid = document.getElementById('prodGrid');
+  if (prods.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = prods.map(function(p) {
+    return '<div class="product-card">'
+      + '<div class="prod-img">'
+      + (p.photo ? '<img src="' + p.photo + '" alt="' + p.name + '" onerror="this.style.display=\'none\'">' : '')
+      + '<span class="prod-emoji" style="' + (p.photo ? 'display:none' : '') + '">' + p.emoji + '</span>'
+      + (p.badge ? '<span class="prod-badge">' + p.badge + '</span>' : '')
+      + '</div>'
+      + '<div class="prod-body">'
+      + '<div class="prod-name">' + p.name + '</div>'
+      + '<div class="prod-desc">' + p.desc + '</div>'
+      + '<div class="prod-foot"><div>'
+      + '<div class="prod-price">' + rp(p.price) + '</div>'
+      + '<div class="prod-unit">' + p.unit + '</div>'
+      + '</div><div id="ctrl_' + p.id + '"><button class="add-btn" onclick="addToCart(' + p.id + ')">+</button></div>'
+      + '</div></div></div>';
+  }).join('');
+  getCart().forEach(function(item) { renderQtyCtrl(item.id); });
+}
+
+applyFilter();
+</script>
+</body>
+</html>

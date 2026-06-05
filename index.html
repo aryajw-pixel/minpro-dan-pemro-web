@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dapur Mama Arya — Risol & Donat Homemade</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">🏠 Homemade · Fresh Every Day</div>
+    <h1>Risol & Donat <span>Lezat</span><br>Langsung ke Pintu Anda</h1>
+    <p>Camilan rumahan dengan bahan pilihan, dimasak dengan penuh cinta. Pesan sekarang, nikmati kelezatan asli buatan tangan!</p>
+    <div class="hero-cta">
+      <a href="produk.html" class="btn btn-primary">🛒 Pesan Sekarang</a>
+      <a href="tentang.html" class="btn btn-outline">📖 Tentang Kami</a>
+    </div>
+    <div class="hero-stats">
+      <div style="text-align:center"><div class="stat-num">500+</div><div class="stat-lbl">Pelanggan Puas</div></div>
+      <div style="text-align:center"><div class="stat-num">4.9 ⭐</div><div class="stat-lbl">Rating Rata-rata</div></div>
+      <div style="text-align:center"><div class="stat-num">12+</div><div class="stat-lbl">Varian Produk</div></div>
+      <div style="text-align:center"><div class="stat-num">2 Jam</div><div class="stat-lbl">Kirim Cepat</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<section class="section" style="padding-top:40px;padding-bottom:0;">
+  <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dk));border-radius:18px;padding:30px 36px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;">
+    <div>
+      <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✨ Promo Spesial</div>
+      <h2 style="font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:7px;">Beli 10 Pcs, Gratis Ongkir! 🎉</h2>
+      <p style="color:rgba(255,255,255,.85);font-size:14px;">Berlaku semua varian risol & donat. Pesan sekarang!</p>
+    </div>
+    <a href="produk.html" class="btn btn-primary" style="background:#fff;color:var(--primary);flex-shrink:0;">Lihat Produk →</a>
+  </div>
+</section>
+
+<!-- KATEGORI -->
+<section class="section" style="padding-top:44px;padding-bottom:44px;">
+  <div class="sec-head">
+    <div class="sec-tag">🍽️ Kategori</div>
+    <h2>Temukan Favorit Kamu</h2>
+    <p>Pilih kategori untuk melihat semua produk kami</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;">
+    <a href="produk.html?cat=risol" class="cat-card">
+      <div class="cat-img-wrap">
+        <img src="risol.jpeg" alt="Risol" class="cat-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cat-emoji-fb" style="display:none;">🥟</div>
+      </div>
+      <h3 style="font-size:15px;font-weight:800;color:var(--brown);margin-bottom:3px;">Risol</h3>
+      <p style="font-size:13px;color:var(--muted);">4 varian tersedia</p>
+    </a>
+    <a href="produk.html?cat=donat" class="cat-card">
+      <div class="cat-img-wrap">
+        <img src="donat.jpeg" alt="Donat" class="cat-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cat-emoji-fb" style="display:none;">🍩</div>
+      </div>
+      <h3 style="font-size:15px;font-weight:800;color:var(--brown);margin-bottom:3px;">Donat</h3>
+      <p style="font-size:13px;color:var(--muted);">4 varian tersedia</p>
+    </a>
+    <a href="produk.html?cat=paket" class="cat-card">
+      <div class="cat-img-wrap">
+        <img src="paket risol dan donat.jpeg" alt="Paket" class="cat-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="cat-emoji-fb" style="display:none;">📦</div>
+      </div>
+      <h3 style="font-size:15px;font-weight:800;color:var(--brown);margin-bottom:3px;">Paket Hemat</h3>
+      <p style="font-size:13px;color:var(--muted);">4 paket spesial</p>
+    </a>
+    <a href="produk.html" class="cat-card" style="background:var(--primary-lt);border-color:rgba(232,93,4,.2);">
+      <div class="cat-img-wrap">
+        <div class="cat-emoji-fb" style="display:flex;">🌟</div>
+      </div>
+      <h3 style="font-size:15px;font-weight:800;color:var(--primary);margin-bottom:3px;">Semua Produk</h3>
+      <p style="font-size:13px;color:var(--muted);">12+ produk tersedia</p>
+    </a>
+  </div>
+</section>
+
+<!-- BEST SELLER -->
+<div style="background:var(--secondary);padding:56px 0;">
+  <div class="section" style="padding-top:0;padding-bottom:0;">
+    <div class="sec-head">
+      <div class="sec-tag">🔥 Terlaris</div>
+      <h2>Best Seller Minggu Ini</h2>
+      <p>Produk paling banyak dipesan pelanggan kami</p>
+    </div>
+    <div class="products-grid" id="bsGrid"></div>
+    <div style="text-align:center;margin-top:28px;">
+      <a href="produk.html" class="btn btn-outline">Lihat Semua Produk →</a>
+    </div>
+  </div>
+</div>
+
+<!-- KEUNGGULAN -->
+<section class="section">
+  <div class="sec-head">
+    <div class="sec-tag">✨ Keunggulan</div>
+    <h2>Kenapa Pilih Dapur Mama Arya?</h2>
+    <p>Kami berkomitmen memberikan yang terbaik untuk setiap gigitan</p>
+  </div>
+  <div class="features-grid">
+    <div class="feat-card"><div class="feat-icon">🥚</div><h3>Bahan Segar & Alami</h3><p>Semua bahan dipilih setiap hari, tanpa pengawet dan bahan kimia berbahaya.</p></div>
+    <div class="feat-card"><div class="feat-icon">👩‍🍳</div><h3>Buatan Tangan</h3><p>Setiap produk dibuat dengan tangan oleh ahlinya, menjamin kualitas terbaik.</p></div>
+    <div class="feat-card"><div class="feat-icon">🚴</div><h3>Antar Cepat 2 Jam</h3><p>Pesan sebelum jam 11 siang, terima di sore hari. Fresh dan masih hangat!</p></div>
+    <div class="feat-card"><div class="feat-icon">💳</div><h3>Bayar Mudah</h3><p>Transfer bank, QRIS, GoPay, OVO, atau bayar di tempat (COD). Semua bisa!</p></div>
+  </div>
+</section>
+
+<!-- CTA LOGIN -->
+<section class="section" style="padding-top:0;" id="ctaBox">
+  <div style="background:linear-gradient(135deg,#FFF0E0,#FAEDCD);border-radius:18px;padding:38px;text-align:center;border:1px solid rgba(232,93,4,.15);">
+    <div style="font-size:46px;margin-bottom:12px;">👤</div>
+    <h2 style="font-size:1.4rem;font-weight:800;color:var(--brown);margin-bottom:9px;">Daftar & Pantau Pesanan Kamu</h2>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:22px;">Login untuk melihat riwayat pesanan dan mendapat promo eksklusif!</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="login.html" class="btn btn-primary">👤 Masuk Sekarang</a>
+      <a href="login.html#daftar" class="btn btn-outline">✏️ Daftar Gratis</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;">🍩 Dapur Mama Arya</div>
+        <p>UMKM kuliner rumahan yang menyajikan risol dan donat homemade terbaik di Kepulauan Riau.</p>
+      </div>
+      <div class="footer-col"><h4>Menu</h4>
+        <a href="produk.html">Risol Mayo</a><a href="produk.html">Donat Klasik</a>
+        <a href="produk.html">Paket Hemat</a><a href="produk.html">Semua Produk</a>
+      </div>
+      <div class="footer-col"><h4>Tautan</h4>
+        <a href="tentang.html">Tentang Kami</a><a href="ulasan.html">Ulasan</a>
+        <a href="kontak.html">Kontak</a><a href="login.html">Login / Daftar</a>
+        <a href="#">📱 085167201891</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Dapur Mama Arya · Dibuat dengan ❤️ di Tanjung Pinang, Kepulauan Riau</div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/6285167201891" target="_blank">💬 WhatsApp</a>
+
+<style>
+.cat-card{background:#fff;border:1px solid var(--border);border-radius:15px;padding:18px 18px 20px;text-align:center;text-decoration:none;display:block;transition:all .3s;color:inherit;}
+.cat-card:hover{transform:translateY(-5px);box-shadow:0 8px 24px rgba(232,93,4,.15);border-color:var(--accent);}
+.cat-img-wrap{width:80px;height:80px;border-radius:14px;overflow:hidden;margin:0 auto 12px;background:var(--secondary);}
+.cat-img{width:100%;height:100%;object-fit:cover;display:block;}
+.cat-emoji-fb{width:80px;height:80px;border-radius:14px;background:var(--secondary);display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto 12px;}
+</style>
+
+<script src="auth.js"></script>
+<script src="data.js"></script>
+<script src="navbar.js"></script>
+<script>
+injectDemoIfEmpty();
+renderNavbar('home');
+renderCartSidebar();
+
+// Render best sellers
+var bs=getActiveProducts().filter(function(p){return p.badge==='Best Seller'||p.badge==='Terlaris';}).slice(0,3);
+document.getElementById('bsGrid').innerHTML=bs.map(function(p){
+  return '<div class="product-card">'
+    +'<div class="prod-img">'+(p.photo?'<img src="'+p.photo+'" alt="'+p.name+'" onerror="this.style.display=\'none\'">':'')
+    +'<span class="prod-emoji" style="'+(p.photo?'display:none':'')+'">'+p.emoji+'</span>'
+    +(p.badge?'<span class="prod-badge">'+p.badge+'</span>':'')
+    +'</div>'
+    +'<div class="prod-body">'
+    +'<div class="prod-name">'+p.name+'</div>'
+    +'<div class="prod-desc">'+p.desc+'</div>'
+    +'<div class="prod-foot"><div><div class="prod-price">'+rp(p.price)+'</div><div class="prod-unit">'+p.unit+'</div></div>'
+    +'<div id="ctrl_'+p.id+'"><button class="add-btn" onclick="addToCart('+p.id+')">+</button></div>'
+    +'</div></div></div>';
+}).join('');
+
+// Sync qty if cart exists
+getCart().forEach(function(item){renderQtyCtrl(item.id);});
+
+// Hide CTA if logged in
+if(getCurrentUser())document.getElementById('ctaBox').style.display='none';
+</script>
+</body>
+</html>

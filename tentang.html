@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tentang Kami — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.about-hero{background:linear-gradient(135deg,#FFF0E0,#FAEDCD);padding:60px 24px;}
+.about-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+.about-img-box{background:#fff;border-radius:22px;height:300px;display:flex;align-items:center;justify-content:center;font-size:100px;border:1px solid var(--border);box-shadow:0 8px 32px rgba(232,93,4,.1);}
+.team-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.team-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;transition:all .2s;}
+.team-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.08);}
+.team-av{width:68px;height:68px;background:var(--primary-lt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;margin:0 auto 12px;overflow:hidden;}
+.team-photo{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block;}
+.team-emoji-fb{font-size:30px;}
+.val-card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:17px;display:flex;gap:13px;align-items:flex-start;}
+.val-ico{font-size:26px;flex-shrink:0;}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;}.about-img-box{height:180px;font-size:72px;}.team-grid{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="about-hero">
+  <div class="about-grid">
+    <div>
+      <div class="sec-tag">🏠 Tentang Kami</div>
+      <h1 style="font-size:2rem;font-weight:800;color:var(--brown);line-height:1.25;margin:12px 0 16px;">Dapur Kecil dengan<br><span style="color:var(--primary);">Cita Rasa Besar</span></h1>
+      <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:12px;">Dapur Mama Arya adalah usaha rumahan yang lahir dari kecintaan pada masakan tradisional Indonesia. Kami percaya bahwa makanan terbaik adalah yang dibuat dengan tangan sendiri, penuh kasih sayang, dan bahan-bahan segar pilihan.</p>
+      <p style="font-size:15px;color:var(--muted);line-height:1.8;margin-bottom:22px;">Berdiri sejak 2020 di Tanjung Pinang, kami telah melayani ratusan pelanggan setia di Kepulauan Riau.</p>
+      <a href="produk.html" class="btn btn-primary">🛒 Pesan Sekarang</a>
+    </div>
+    <div class="about-img-box">
+      <img src="logo dapur mama arya.jpeg" alt="Dapur Mama Arya"
+        style="width:100%;height:100%;object-fit:cover;border-radius:22px;"
+        onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+      <div style="display:none;width:100%;height:100%;align-items:center;justify-content:center;font-size:100px;">🍩</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;">
+    <!-- Timeline -->
+    <div>
+      <div class="sec-tag">📅 Perjalanan Kami</div>
+      <h2 style="font-size:1.6rem;font-weight:800;color:var(--brown);margin:12px 0 24px;">Dari Dapur ke Hati Pelanggan</h2>
+      <div class="tl">
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2020</div><div class="tl-title">Awal Mula</div><div class="tl-desc">Mama Arya mulai membuat risol dan donat untuk keluarga, dan tetangga mulai pesan satu per satu.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2021</div><div class="tl-title">Buka Order Resmi</div><div class="tl-desc">Membuka pesanan resmi via WhatsApp. Dalam sebulan sudah punya 50+ pelanggan tetap.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2022</div><div class="tl-title">Ekspansi Varian</div><div class="tl-desc">Menambah 8 varian baru termasuk Risol Keju Mozarella dan Donat Matcha yang langsung jadi favorit.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2023</div><div class="tl-title">500+ Pelanggan</div><div class="tl-desc">Mencapai 500 pelanggan dan mulai menerima pesanan untuk acara, arisan, dan hampers.</div></div>
+        <div class="tl-item"><div class="tl-dot"></div><div class="tl-year">2026</div><div class="tl-title">Website Diluncurkan</div><div class="tl-desc">Hadir dengan website resmi agar pelanggan bisa memesan kapan saja dan di mana saja.</div></div>
+      </div>
+    </div>
+    <!-- Nilai & Tim -->
+    <div>
+      <div class="sec-tag">💛 Nilai Kami</div>
+      <h2 style="font-size:1.5rem;font-weight:800;color:var(--brown);margin:12px 0 20px;">Komitmen Kami untuk Anda</h2>
+      <div style="display:flex;flex-direction:column;gap:13px;margin-bottom:36px;">
+        <div class="val-card"><div class="val-ico">🌿</div><div><h4 style="font-weight:800;font-size:14px;color:var(--brown);margin-bottom:4px;">100% Alami & Tanpa Pengawet</h4><p style="font-size:13px;color:var(--muted);line-height:1.6;">Semua bahan dipilih segar setiap hari langsung dari pasar lokal.</p></div></div>
+        <div class="val-card"><div class="val-ico">🤲</div><div><h4 style="font-weight:800;font-size:14px;color:var(--brown);margin-bottom:4px;">Dibuat dengan Tangan</h4><p style="font-size:13px;color:var(--muted);line-height:1.6;">Setiap risol dan donat dibentuk satu per satu tanpa mesin massal.</p></div></div>
+        <div class="val-card"><div class="val-ico">❤️</div><div><h4 style="font-weight:800;font-size:14px;color:var(--brown);margin-bottom:4px;">Kepuasan Pelanggan #1</h4><p style="font-size:13px;color:var(--muted);line-height:1.6;">Jika ada yang tidak puas, kami siap ganti atau refund tanpa pertanyaan.</p></div></div>
+      </div>
+      <div class="sec-tag">👨‍👩‍👧 Tim Kami</div>
+      <h2 style="font-size:1.4rem;font-weight:800;color:var(--brown);margin:12px 0 18px;">Orang-orang di Balik Kelezatan</h2>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-av">
+            <img src="megawat.jpeg" alt="Mama Arya" class="team-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span class="team-emoji-fb" style="display:none;">👩‍🍳</span>
+          </div>
+          <div style="font-weight:800;font-size:14px;color:var(--brown);">Mama Arya</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Founder &amp; Chef Utama</div>
+        </div>
+        <div class="team-card">
+          <div class="team-av">
+            <img src="chef juna.jpeg" alt="chef juna" class="team-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span class="team-emoji-fb" style="display:none;">👨</span>
+          </div>
+          <div style="font-weight:800;font-size:14px;color:var(--brown);">Chef Juna</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Asisten Dapur</div>
+        </div>
+        <div class="team-card">
+          <div class="team-av">
+            <img src="mael lee.jpeg" alt="mael lee" class="team-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span class="team-emoji-fb" style="display:none;">👧</span>
+          </div>
+          <div style="font-weight:800;font-size:14px;color:var(--brown);">Mael Lee</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Pengiriman &amp; Logistik</div>
+        </div>
+        <div class="team-card">
+          <div class="team-av">
+            <img src="dr tirta.jpeg" alt="Dr Tirta" class="team-photo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <span class="team-emoji-fb" style="display:none;">👦</span>
+          </div>
+          <div style="font-weight:800;font-size:14px;color:var(--brown);">Dr.Tirta</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:3px;">Customer Service</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pencapaian -->
+<div style="background:var(--secondary);padding:56px 0;">
+  <div class="section" style="padding-top:0;padding-bottom:0;">
+    <div class="sec-head">
+      <div class="sec-tag">🏆 Pencapaian</div>
+      <h2>Diakui & Dipercaya</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card"><div class="feat-icon">🏅</div><h3>PIRT Terdaftar</h3><p>Produk kami telah terdaftar di Dinas Kesehatan dengan sertifikat PIRT resmi.</p></div>
+      <div class="feat-card"><div class="feat-icon">⭐</div><h3>Rating 4.9/5</h3><p>Berdasarkan lebih dari 200 ulasan nyata dari pelanggan setia kami.</p></div>
+      <div class="feat-card"><div class="feat-icon">🎖️</div><h3>UMKM Unggulan</h3><p>Terpilih sebagai UMKM Kuliner Unggulan Kota Tanjung Pinang 2024.</p></div>
+      <div class="feat-card"><div class="feat-icon">💚</div><h3>Halal</h3><p>Semua produk menggunakan bahan-bahan halal dan diproses secara higienis.</p></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;">🍩 Dapur Mama Arya</div>
+        <p>UMKM kuliner rumahan terbaik di Kepulauan Riau.</p>
+      </div>
+      <div class="footer-col"><h4>Halaman</h4>
+        <a href="index.html">Beranda</a><a href="produk.html">Produk</a>
+        <a href="ulasan.html">Ulasan</a><a href="kontak.html">Kontak</a>
+      </div>
+      <div class="footer-col"><h4>Kontak</h4>
+        <a href="#">📱 085167201891</a><a href="#">🕐 07.00–20.00</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Dapur Mama Arya · Dibuat dengan ❤️ di Tanjung Pinang</div>
+  </div>
+</footer>
+<a class="wa-float" href="https://wa.me/6285167201891" target="_blank">💬 WhatsApp</a>
+
+<script src="auth.js"></script>
+<script src="data.js"></script>
+<script src="navbar.js"></script>
+<script>renderNavbar('tentang'); renderCartSidebar();</script>
+</body>
+</html>

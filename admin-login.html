@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login Admin — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body{background:linear-gradient(135deg,#3d1f00,#7B3F00,#a85400);}
+.admin-login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.admin-login-card{background:#fff;border-radius:22px;width:100%;max-width:400px;padding:38px;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.hint-box{background:var(--secondary);border:1px solid rgba(232,93,4,.2);border-radius:10px;padding:13px;margin-bottom:18px;font-size:12px;color:var(--brown);line-height:1.8;}
+</style>
+</head>
+<body>
+<div class="admin-login-wrap">
+  <div class="admin-login-card">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:50px;margin-bottom:8px;">⚙️</div>
+      <h2 style="font-size:21px;font-weight:800;color:var(--brown);">Admin Panel</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:3px;">Dapur Mama Arya — Sistem Manajemen</p>
+    </div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:#fee2e2;color:var(--danger);border-radius:99px;padding:5px 13px;font-size:12px;font-weight:800;margin-bottom:16px;">🔐 Akses Terbatas</div>
+    <div class="hint-box">
+      <strong>Akun Demo Admin:</strong><br>
+      Email: <strong>admin@dapur.com</strong><br>
+      Password: <strong>Admin123!</strong>
+    </div>
+    <div class="auth-err" id="aErr"></div>
+    <div class="inp-wrap">
+      <label>Email Admin</label>
+      <span class="inp-icon">📧</span>
+      <input type="email" id="a_email" placeholder="admin@dapur.com" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <div class="inp-wrap" style="margin-bottom:22px;">
+      <label>Password</label>
+      <span class="inp-icon">🔒</span>
+      <input type="password" id="a_pass" placeholder="Password admin" onkeydown="if(event.key==='Enter')doAdminLogin()">
+      <button class="inp-eye" onclick="toggleEye()">👁️</button>
+    </div>
+    <button class="auth-btn" onclick="doAdminLogin()">🔑 Masuk ke Panel Admin</button>
+    <div style="text-align:center;margin-top:18px;padding-top:18px;border-top:1px solid var(--border);">
+      <a href="login.html" style="font-size:13px;color:var(--muted);text-decoration:none;">← Kembali ke Login Pelanggan</a>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="auth.js"></script>
+<script>
+var cu=getCurrentUser();if(cu&&cu.role==='admin')window.location.href='admin.html';
+function toggleEye(){var i=document.getElementById('a_pass');i.type=i.type==='password'?'text':'password';}
+function doAdminLogin(){
+  var email=document.getElementById('a_email').value.trim();
+  var pass=document.getElementById('a_pass').value;
+  var err=document.getElementById('aErr');err.classList.remove('show');
+  if(!email||!pass){err.textContent='⚠️ Wajib diisi.';err.classList.add('show');return;}
+  var r=authLogin(email,pass);
+  if(r.success&&r.user.role==='admin'){
+    showToast('✅ Selamat datang, '+r.user.name+'!','ok');
+    setTimeout(function(){window.location.href='admin.html';},700);
+  }else if(r.success){logout();err.textContent='❌ Akun ini bukan akun admin.';err.classList.add('show');}
+  else{err.textContent='❌ '+r.error;err.classList.add('show');}
+}
+function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');setTimeout(function(){t.className='toast';},2500);}
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="logo"><div class="logo-icon">🍩</div>Dapur Mama Arya</a>
+    <div></div>
+  </div>
+</nav>
+
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <div class="ai">🍩</div>
+      <h2>Dapur Mama Arya</h2>
+      <p>Masuk atau daftar untuk mulai memesan</p>
+    </div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabIn" onclick="switchTab('in')">Masuk</button>
+      <button class="auth-tab" id="tabUp" onclick="switchTab('up')">Daftar</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-form active" id="fIn">
+      <div class="auth-err" id="errIn"></div>
+      <div class="inp-wrap">
+        <label>Email</label>
+        <span class="inp-icon">📧</span>
+        <input type="email" id="l_email" placeholder="email@kamu.com" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div class="inp-wrap">
+        <label>Password</label>
+        <span class="inp-icon">🔒</span>
+        <input type="password" id="l_pass" placeholder="Password kamu" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="inp-eye" onclick="toggleEye('l_pass',this)">👁️</button>
+      </div>
+      <div style="text-align:right;margin-bottom:14px;">
+        <a href="#" style="font-size:13px;color:var(--primary);text-decoration:none;" onclick="alert('Hubungi admin via WhatsApp untuk reset password.')">Lupa password?</a>
+      </div>
+      <button class="auth-btn" onclick="doLogin()">Masuk →</button>
+      <p class="auth-note">Belum punya akun? <a href="#" onclick="switchTab('up')">Daftar gratis</a></p>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="auth-form" id="fUp">
+      <div class="auth-err" id="errUp"></div>
+      <div class="inp-wrap">
+        <label>Nama Lengkap</label>
+        <span class="inp-icon">👤</span>
+        <input type="text" id="r_name" placeholder="Nama lengkap kamu">
+      </div>
+      <div class="inp-wrap">
+        <label>Email</label>
+        <span class="inp-icon">📧</span>
+        <input type="email" id="r_email" placeholder="email@kamu.com">
+      </div>
+      <div class="inp-wrap">
+        <label>Nomor WhatsApp</label>
+        <span class="inp-icon">📱</span>
+        <input type="tel" id="r_phone" placeholder="08xxxxxxxxxx">
+      </div>
+      <div class="inp-wrap">
+        <label>Password</label>
+        <span class="inp-icon">🔒</span>
+        <input type="password" id="r_pass" placeholder="Minimal 6 karakter">
+        <button class="inp-eye" onclick="toggleEye('r_pass',this)">👁️</button>
+      </div>
+      <div class="inp-wrap">
+        <label>Konfirmasi Password</label>
+        <span class="inp-icon">🔒</span>
+        <input type="password" id="r_pass2" placeholder="Ulangi password">
+        <button class="inp-eye" onclick="toggleEye('r_pass2',this)">👁️</button>
+      </div>
+      <div style="background:var(--primary-lt);border-radius:9px;padding:10px 13px;font-size:12px;color:var(--brown);margin-bottom:14px;">🔒 Data Anda aman. Tidak dibagikan ke pihak ketiga.</div>
+      <button class="auth-btn" onclick="doRegister()">Daftar Sekarang →</button>
+      <p class="auth-note">Sudah punya akun? <a href="#" onclick="switchTab('in')">Masuk di sini</a></p>
+    </div>
+
+
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="auth.js"></script>
+<script>
+var cu=getCurrentUser();
+if(cu){window.location.href=cu.role==='admin'?'admin.html':'index.html';}
+if(window.location.hash==='#daftar')switchTab('up');
+
+function switchTab(t){
+  document.getElementById('tabIn').classList.toggle('active',t==='in');
+  document.getElementById('tabUp').classList.toggle('active',t==='up');
+  document.getElementById('fIn').classList.toggle('active',t==='in');
+  document.getElementById('fUp').classList.toggle('active',t==='up');
+  document.getElementById('errIn').classList.remove('show');
+  document.getElementById('errUp').classList.remove('show');
+}
+function showErr(id,msg){var e=document.getElementById(id);e.textContent=msg;e.classList.add('show');}
+function toggleEye(id,btn){var i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.textContent=i.type==='password'?'👁️':'🙈';}
+
+function doLogin(){
+  var email=document.getElementById('l_email').value.trim();
+  var pass=document.getElementById('l_pass').value;
+  if(!email||!pass){showErr('errIn','⚠️ Email dan password wajib diisi.');return;}
+  var r=authLogin(email,pass);
+  if(r.success){
+    showToast('✅ Selamat datang, '+r.user.name+'!','ok');
+    setTimeout(function(){window.location.href=r.user.role==='admin'?'admin.html':'index.html';},700);
+  }else{showErr('errIn','❌ '+r.error);}
+}
+
+function doRegister(){
+  var name=document.getElementById('r_name').value.trim();
+  var email=document.getElementById('r_email').value.trim();
+  var phone=document.getElementById('r_phone').value.trim();
+  var pass=document.getElementById('r_pass').value;
+  var pass2=document.getElementById('r_pass2').value;
+  if(!name||!email||!pass){showErr('errUp','⚠️ Nama, email, dan password wajib diisi.');return;}
+  if(pass!==pass2){showErr('errUp','❌ Konfirmasi password tidak cocok.');return;}
+  var r=authRegister(name,email,pass);
+  if(r.success){
+    if(phone){var us=getUsers(),u=us.find(function(x){return x.id===r.user.id;});if(u){u.phone=phone;saveUsers(us);}}
+    showToast('🎉 Akun berhasil dibuat!','ok');
+    setTimeout(function(){window.location.href='index.html';},700);
+  }else{showErr('errUp','❌ '+r.error);}
+}
+
+function showToast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(type?' '+type:'');setTimeout(function(){t.className='toast';},2800);}
+</script>
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="admin-wrap">
+
+<div class="admin-sb" id="adminSb">
+  <div class="admin-sb-logo"><div class="sb-logo-ico">&#127849;</div><span>Dapur Mama Arya</span></div>
+  <div class="admin-sb-user" id="sbUser"></div>
+  <nav class="admin-nav">
+    <button class="nav-item active"    onclick="goSec('dashboard',this)"><span class="ni">&#128202;</span>Dashboard</button>
+    <button class="nav-item"           onclick="goSec('produk',this)"><span class="ni">&#127869;</span>Produk</button>
+    <button class="nav-item"           onclick="goSec('pelanggan',this)"><span class="ni">&#128101;</span>Pelanggan</button>
+    <button class="nav-item"           onclick="goSec('ulasan',this)"><span class="ni">&#11088;</span>Ulasan</button>
+    <button class="nav-item"           onclick="goSec('laporan',this)"><span class="ni">&#128200;</span>Laporan</button>
+    <button class="nav-item"           onclick="goSec('pengaturan',this)"><span class="ni">&#9881;</span>Pengaturan</button>
+  </nav>
+  <div class="admin-sb-foot">
+    <button class="nav-item" style="color:#f87171;" onclick="adminLogout()"><span class="ni">&#128682;</span>Keluar</button>
+  </div>
+</div>
+
+<div class="admin-main">
+  <div class="admin-topbar">
+    <div style="display:flex;align-items:center;gap:11px;">
+      <button id="sbToggle" style="background:none;border:none;font-size:20px;cursor:pointer;display:none;" onclick="document.getElementById('adminSb').classList.toggle('open')">&#9776;</button>
+      <h1 id="secTitle">Dashboard</h1>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <a href="index.html" target="_blank" class="btn-sm btn-edit">&#127760; Website</a>
+      <span style="font-size:12px;color:var(--muted);" id="clock"></span>
+    </div>
+  </div>
+
+  <div class="admin-content">
+
+    <!-- DASHBOARD -->
+    <div class="admin-section active" id="sec_dashboard">
+      <div class="stats-grid" id="statsGrid"></div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:18px;">
+        <div class="admin-card">
+          <div class="admin-card-head">
+            <h3>&#128230; Pesanan Terbaru</h3>
+          </div>
+          <div style="overflow-x:auto;"><table class="tbl">
+            <thead><tr><th>ID Pesanan</th><th>Pelanggan</th><th>Total</th><th>Status</th><th>Ubah Status</th></tr></thead>
+            <tbody id="recentTbody"></tbody>
+          </table></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#128200; Penjualan 7 Hari</h3></div>
+          <div style="padding:14px 18px;">
+            <div class="chart-wrap" id="salesChart"></div>
+            <div style="font-size:12px;color:var(--muted);margin-top:10px;">Total: <strong id="weekTot" style="color:var(--primary);">Rp 0</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>&#128293; Produk Terpopuler</h3></div>
+        <div style="overflow-x:auto;"><table class="tbl">
+          <thead><tr><th>#</th><th>Produk</th><th>Terjual</th><th>Pendapatan</th></tr></thead>
+          <tbody id="popTbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- PRODUK -->
+    <div class="admin-section" id="sec_produk">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+        <div style="font-size:13px;color:var(--muted);">Kelola produk yang tampil di toko</div>
+        <button class="btn btn-primary" style="padding:9px 18px;font-size:14px;" onclick="openProdForm(null)">+ Tambah Produk</button>
+      </div>
+      <div class="admin-card"><div class="prod-grid-admin" id="prodGrid"></div></div>
+    </div>
+
+    <!-- PELANGGAN -->
+    <div class="admin-section" id="sec_pelanggan">
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>&#128101; Daftar Pelanggan</h3><span id="custCount" style="font-size:13px;color:var(--muted);"></span></div>
+        <div style="overflow-x:auto;"><table class="tbl">
+          <thead><tr><th>Nama</th><th>Email</th><th>Daftar</th><th>Pesanan</th><th>Total Belanja</th></tr></thead>
+          <tbody id="custTbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- ULASAN -->
+    <div class="admin-section" id="sec_ulasan">
+      <div class="admin-card">
+        <div class="admin-card-head"><h3>&#11088; Manajemen Ulasan</h3></div>
+        <div style="overflow-x:auto;"><table class="tbl">
+          <thead><tr><th>Nama</th><th>Produk</th><th>Rating</th><th>Ulasan</th><th>Tanggal</th><th>Aksi</th></tr></thead>
+          <tbody id="rvTbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- LAPORAN -->
+    <div class="admin-section" id="sec_laporan">
+      <div class="stats-grid" id="lapStats"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#128197; Ringkasan</h3></div>
+          <div style="padding:18px;"><table class="tbl">
+            <thead><tr><th>Periode</th><th>Pesanan</th><th>Pendapatan</th></tr></thead>
+            <tbody id="lapTbody"></tbody>
+          </table></div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#127869; Produk Terlaris</h3></div>
+          <div style="padding:18px;" id="lapProd"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PENGATURAN -->
+    <div class="admin-section" id="sec_pengaturan">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#127981; Informasi Toko</h3></div>
+          <div style="padding:18px;">
+            <div class="form-group"><label>Nama Toko</label><input id="st_nama" value="Dapur Mama Arya"></div>
+            <div class="form-group"><label>No. WhatsApp</label><input id="st_wa" value="085167201891"></div>
+            <div class="form-group"><label>Jam Buka</label><input id="st_jam" value="07.00 - 20.00 WIB"></div>
+            <div class="form-group"><label>Ongkos Kirim (Rp)</label><input id="st_ongkir" type="number" value="5000"></div>
+            <button class="btn btn-primary" style="padding:9px 18px;font-size:13px;" onclick="saveShop()">Simpan</button>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#128273; Ubah Password Admin</h3></div>
+          <div style="padding:18px;">
+            <div style="background:#fef3c7;border-radius:9px;padding:11px;font-size:12px;color:#92400e;margin-bottom:14px;">Pastikan ingat kredensial baru!</div>
+            <div class="form-group"><label>Nama Admin</label><input id="new_name" placeholder="Nama admin"></div>
+            <div class="form-group"><label>Email Baru</label><input id="new_email" type="email" placeholder="admin@email.com"></div>
+            <div class="form-group"><label>Password Baru</label><input id="new_pass" type="password" placeholder="Kosongkan jika tidak diubah"></div>
+            <div class="form-group"><label>Konfirmasi Password</label><input id="new_pass2" type="password" placeholder="Ulangi password baru"></div>
+            <button class="btn btn-primary" style="padding:9px 18px;font-size:13px;" onclick="saveCreds()">Update</button>
+          </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#128179; Info Rekening</h3></div>
+          <div style="padding:18px;">
+            <div class="form-group"><label>Nama Rekening</label><input id="pay_nama" value="ARYA JUNIANTO WINATA"></div>
+            <div class="form-group"><label>No. BCA</label><input id="pay_bca" value="1234567890"></div>
+            <div class="form-group"><label>No. BNI</label><input id="pay_bni" value="0987654321"></div>
+            <button class="btn btn-primary" style="padding:9px 18px;font-size:13px;" onclick="savePay()">Simpan</button>
+          </div>
+        </div>
+        </div>
+        <div class="admin-card">
+          <div class="admin-card-head"><h3>&#128436; Manajemen Data</h3></div>
+          <div style="padding:18px;display:flex;flex-direction:column;gap:11px;">
+            <div style="background:var(--bg);border-radius:9px;padding:13px;">
+              <p style="font-size:13px;font-weight:800;color:var(--brown);margin-bottom:3px;">Export Pesanan</p>
+              <p style="font-size:12px;color:var(--muted);margin-bottom:9px;">Download semua data pesanan (JSON).</p>
+              <button class="btn-sm btn-edit" onclick="exportData('orders')">Export</button>
+            </div>
+            <div style="background:var(--bg);border-radius:9px;padding:13px;">
+              <p style="font-size:13px;font-weight:800;color:var(--brown);margin-bottom:3px;">Export Pelanggan</p>
+              <p style="font-size:12px;color:var(--muted);margin-bottom:9px;">Download data akun pelanggan.</p>
+              <button class="btn-sm btn-edit" onclick="exportData('users')">Export</button>
+            </div>
+            <div style="background:#fee2e2;border-radius:9px;padding:13px;">
+              <p style="font-size:13px;font-weight:800;color:var(--danger);margin-bottom:3px;">Reset Pesanan</p>
+              <p style="font-size:12px;color:var(--muted);margin-bottom:9px;">Hapus semua data pesanan (permanen).</p>
+              <button class="btn-sm btn-del" onclick="resetOrders()">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /admin-content -->
+</div><!-- /admin-main -->
+</div><!-- /admin-wrap -->
+
+<!-- MODAL PRODUK -->
+<div class="form-overlay" id="prodModal">
+  <div class="form-box">
+    <div class="form-box-head">
+      <h3 id="prodModalTitle">+ Tambah Produk</h3>
+      <button class="close-btn" onclick="closeProdForm()">X</button>
+    </div>
+    <div class="form-box-body">
+      <div class="form-group"><label>Nama Produk *</label><input id="pf_name" placeholder="Nama produk"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Harga (Rp) *</label><input id="pf_price" type="number" placeholder="3500"></div>
+        <div class="form-group"><label>Satuan</label><input id="pf_unit" placeholder="per pcs"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Emoji</label><input id="pf_emoji" placeholder="&#129943;"></div>
+        <div class="form-group"><label>Badge</label>
+          <select id="pf_badge">
+            <option value="">Tidak ada</option>
+            <option>Best Seller</option><option>Baru</option><option>Premium</option>
+            <option>Hemat</option><option>Terlaris</option><option>Gift</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label>Deskripsi *</label><textarea id="pf_desc" rows="3" placeholder="Deskripsi produk..."></textarea></div>
+      <div class="form-group"><label>Nama File Foto (opsional)</label><input id="pf_photo" placeholder="contoh: risol-mayo.jpg"></div>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <input type="checkbox" id="pf_active" checked style="width:auto;">
+        <label style="margin:0;font-weight:600;">Produk Aktif</label>
+      </div>
+    </div>
+    <div class="form-box-foot">
+      <button class="btn-back" onclick="closeProdForm()">Batal</button>
+      <button class="btn-next" onclick="saveProd()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<style>
+@media(max-width:900px){#sbToggle{display:block!important;}}
+@media(max-width:640px){.stats-grid{grid-template-columns:1fr 1fr!important;}}
+.msg-card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:18px;margin-bottom:14px;transition:all .2s;}
+.msg-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.08);}
+.msg-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;flex-wrap:wrap;gap:6px;}
+.msg-name{font-weight:800;font-size:15px;color:var(--brown);}
+.msg-time{font-size:12px;color:var(--muted);}
+.msg-subj{display:inline-block;background:var(--primary-lt);color:var(--primary);font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px;margin-bottom:9px;}
+.msg-body{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:12px;}
+.msg-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+</style>
+
+<script>
+// ================================================================
+// ADMIN PANEL - Fully self-contained, no external JS dependency
+// ================================================================
+
+// -- Storage --
+function dbGet(key){return JSON.parse(localStorage.getItem(key)||'null');}
+function dbSet(key,val){localStorage.setItem(key,JSON.stringify(val));}
+
+// ── PESANAN ADMIN: Data statis untuk presentasi ──
+// Data ini selalu tampil di admin dan tidak terhubung ke pesanan pelanggan
+// Ubah data di sini sesuai kebutuhan presentasi kamu
+var DEMO_ORDERS = [
+  {id:'DR-10001',customerName:'Sari Rahmawati',phone:'081234567801',district:'Tanjungpinang Kota',deliveryTime:'10:00-12:00',address:'Jl. Merdeka No. 12',notes:'',payment:'bca',total:38000,status:'done',
+   items:[{name:'Risol Mayo Original',emoji:'🥟',price:3500,qty:5},{name:'Donat Gula Halus',emoji:'🍩',price:3000,qty:4}],
+   createdAt:'2026-06-01T08:30:00.000Z'},
+  {id:'DR-10002',customerName:'Budi Hartono',phone:'081234567802',district:'Bintan Utara',deliveryTime:'14:00-16:00',address:'Jl. Ahmad Yani No. 7',notes:'Tanpa saus pedas',payment:'cod',total:40000,status:'done',
+   items:[{name:'Donat Matcha',emoji:'🍵',price:4000,qty:4},{name:'Risol Keju Mozarella',emoji:'🧀',price:4500,qty:4}],
+   createdAt:'2026-06-01T10:00:00.000Z'},
+  {id:'DR-10003',customerName:'Dewi Lestari',phone:'081234567803',district:'Tanjungpinang Timur',deliveryTime:'16:00-18:00',address:'Griya Pinang C4',notes:'Untuk arisan',payment:'qris',total:60000,status:'done',
+   items:[{name:'Paket Mix 20 Pcs',emoji:'🥳',price:55000,qty:1}],
+   createdAt:'2026-06-02T07:15:00.000Z'},
+  {id:'DR-10004',customerName:'Ahmad Fauzi',phone:'081234567804',district:'Bukit Bestari',deliveryTime:'12:00-14:00',address:'Jl. Teuku Umar No. 55',notes:'',payment:'bni',total:37000,status:'process',
+   items:[{name:'Risol Mayo Original',emoji:'🥟',price:3500,qty:4},{name:'Paket Risol 10 Pcs',emoji:'📦',price:30000,qty:1}],
+   createdAt:'2026-06-02T09:00:00.000Z'},
+  {id:'DR-10005',customerName:'Linda Susanti',phone:'081234567805',district:'Tanjungpinang Barat',deliveryTime:'10:00-12:00',address:'Ruko Pinang Mas No. 3',notes:'Buat kado',payment:'bca',total:31000,status:'pending',
+   items:[{name:'Risol + Donat Box',emoji:'🎀',price:25000,qty:1},{name:'Donat Gula Halus',emoji:'🍩',price:3000,qty:2}],
+   createdAt:'2026-06-03T06:45:00.000Z'},
+  {id:'DR-10006',customerName:'Rizky Ananda',phone:'081234567806',district:'Tanjungpinang Kota',deliveryTime:'18:00-20:00',address:'Jl. Hang Tuah No. 88',notes:'',payment:'cod',total:47000,status:'pending',
+   items:[{name:'Paket Donat 12 Pcs',emoji:'🎁',price:35000,qty:1},{name:'Risol Sayur Segar',emoji:'🥦',price:3000,qty:2}],
+   createdAt:'2026-06-03T08:00:00.000Z'}
+];
+// ── PELANGGAN: Data statis untuk presentasi ──
+var DEMO_USERS = [
+  {id:'u_1',name:'Sari Rahmawati',  email:'sari.rahmawati@gmail.com',  phone:'081234567801',role:'customer',createdAt:'2026-01-15T06:00:00.000Z'},
+  {id:'u_2',name:'Budi Hartono',    email:'budi.hartono@gmail.com',    phone:'081234567802',role:'customer',createdAt:'2026-02-03T07:00:00.000Z'},
+  {id:'u_3',name:'Dewi Lestari',    email:'dewi.lestari@gmail.com',    phone:'081234567803',role:'customer',createdAt:'2026-02-20T08:00:00.000Z'},
+  {id:'u_4',name:'Ahmad Fauzi',     email:'ahmad.fauzi@gmail.com',     phone:'081234567804',role:'customer',createdAt:'2026-03-10T09:00:00.000Z'},
+  {id:'u_5',name:'Linda Susanti',   email:'linda.susanti@gmail.com',   phone:'081234567805',role:'customer',createdAt:'2026-04-01T10:00:00.000Z'},
+  {id:'u_6',name:'Rizky Ananda',    email:'rizky.ananda@gmail.com',    phone:'081234567806',role:'customer',createdAt:'2026-04-18T11:00:00.000Z'},
+  {id:'u_7',name:'Yanti Pratiwi',   email:'yanti.pratiwi@gmail.com',   phone:'081234567807',role:'customer',createdAt:'2026-05-02T07:30:00.000Z'},
+  {id:'u_8',name:'Hendra Kurniawan',email:'hendra.kurniawan@gmail.com',phone:'081234567808',role:'customer',createdAt:'2026-05-15T08:45:00.000Z'},
+];
+
+// ── ULASAN: Data statis untuk presentasi ──
+var DEMO_REVIEWS = [
+  {id:'rv_1',nama:'Sari Rahmawati', produk:'Risol Mayo Original',  rating:5, text:'Risol mayonya JUARA banget! Isinya banyak, kulitnya tipis renyah. Udah langganan tiap minggu!', date:'20 Mei 2026', verified:true},
+  {id:'rv_2',nama:'Budi Hartono',   produk:'Donat Coklat Meses',   rating:5, text:'Donat coklatnya lembut banget, ga keras kayak yang beli di toko. Anak-anak suka banget!',       date:'18 Mei 2026', verified:true},
+  {id:'rv_3',nama:'Dewi Lestari',   produk:'Paket Mix 20 Pcs',     rating:5, text:'Pesen buat arisan, semua teman-teman suka. Harga terjangkau, rasa enak, packaging rapi!',       date:'15 Mei 2026', verified:true},
+  {id:'rv_4',nama:'Ahmad Fauzi',    produk:'Risol Keju Mozarella', rating:5, text:'Kejunya banyak dan meleleh pas digigit. Jadi favorit baru di keluarga kami!',                    date:'12 Mei 2026', verified:true},
+  {id:'rv_5',nama:'Linda Susanti',  produk:'Donat Matcha',         rating:5, text:'Donat matcha-nya kekinian tapi tetap ada cita rasa rumahan. Tidak terlalu manis, perfect!',    date:'10 Mei 2026', verified:false},
+  {id:'rv_6',nama:'Rizky Ananda',   produk:'Paket Risol 10 Pcs',   rating:4, text:'Paket risol sangat worth it! Rasanya konsisten enak setiap pesan.',                             date:'8 Mei 2026',  verified:false},
+  {id:'rv_7',nama:'Yanti Pratiwi',  produk:'Donat Strawberry',     rating:5, text:'Pesen buat ultah anak, donatnya habis sebelum tiup lilin haha. Seger dan manisnya pas!',       date:'5 Mei 2026',  verified:true},
+  {id:'rv_8',nama:'Hendra Kurniawan',produk:'Risol Telur + Sosis', rating:5, text:'Kombinasi telur dan sosis di dalamnya pas banget. Kulit renyah, dalamnya juicy. Recommended!', date:'1 Mei 2026',  verified:true},
+];
+
+function getOrders(){return DEMO_ORDERS;}
+function saveOrders(o){
+  // Status changes update DEMO_ORDERS langsung (in-memory saja)
+  for(var i=0;i<DEMO_ORDERS.length;i++){
+    if(o[i])DEMO_ORDERS[i].status=o[i].status;
+  }
+}
+function getUsers(){return DEMO_USERS;}
+function getCurrentUser(){return dbGet('dma_current_user');}
+function setCurrentUser(u){dbSet('dma_current_user',u);}
+
+function getProducts(){
+  var s=dbGet('dma_products');
+  if(s)return s;
+  return [
+    {id:1,name:'Risol Mayo Original',emoji:'&#129943;',photo:'',price:3500,unit:'per pcs',desc:'Isi ragout ayam + wortel + mayo, kulit tipis renyah.',badge:'Best Seller',active:true},
+    {id:2,name:'Risol Keju Mozarella',emoji:'&#129472;',photo:'',price:4500,unit:'per pcs',desc:'Keju mozzarella meleleh dengan isian creamy.',badge:'Baru',active:true},
+    {id:3,name:'Risol Sayur Segar',emoji:'&#129382;',photo:'',price:3000,unit:'per pcs',desc:'Isian sayuran segar cocok untuk yang sehat.',badge:null,active:true},
+    {id:4,name:'Risol Telur + Sosis',emoji:'&#127789;',photo:'',price:4000,unit:'per pcs',desc:'Kombinasi telur rebus dan sosis ayam.',badge:null,active:true},
+    {id:5,name:'Donat Gula Halus',emoji:'&#127849;',photo:'',price:3000,unit:'per pcs',desc:'Donat klasik lembut bertabur gula halus.',badge:'Best Seller',active:true},
+    {id:6,name:'Donat Coklat Meses',emoji:'&#127851;',photo:'',price:3500,unit:'per pcs',desc:'Dilapisi coklat cair dan taburan meses.',badge:null,active:true},
+    {id:7,name:'Donat Strawberry',emoji:'&#127827;',photo:'',price:3500,unit:'per pcs',desc:'Topping selai strawberry manis asem.',badge:null,active:true},
+    {id:8,name:'Donat Matcha',emoji:'&#127861;',photo:'',price:4000,unit:'per pcs',desc:'Donat premium dengan topping matcha.',badge:'Premium',active:true},
+    {id:9,name:'Paket Risol 10 Pcs',emoji:'&#128230;',photo:'',price:30000,unit:'per paket',desc:'Pilih 10 risol bebas varian.',badge:'Hemat',active:true},
+    {id:10,name:'Paket Donat 12 Pcs',emoji:'&#127873;',photo:'',price:35000,unit:'per paket',desc:'12 donat pilihan bebas varian.',badge:'Hemat',active:true},
+    {id:11,name:'Paket Mix 20 Pcs',emoji:'&#127867;',photo:'',price:55000,unit:'per paket',desc:'10 risol + 10 donat pilihan bebas.',badge:'Terlaris',active:true},
+    {id:12,name:'Risol + Donat Box',emoji:'&#127872;',photo:'',price:25000,unit:'per box',desc:'5 risol + 5 donat dalam satu box cantik.',badge:'Gift',active:true}
+  ];
+}
+function saveProducts(p){dbSet('dma_products',p);}
+
+function rp(n){return 'Rp '+parseInt(n||0).toLocaleString('id-ID');}
+function toast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show'+(type?' '+type:'');
+  setTimeout(function(){t.className='toast';},2800);
+}
+
+// -- Auth --
+function checkAdmin(){
+  var u=getCurrentUser();
+  if(!u||u.role!=='admin'){window.location.href='login.html';return false;}
+  return true;
+}
+function adminLogout(){
+  localStorage.removeItem('dma_current_user');
+  window.location.href='login.html';
+}
+if(!checkAdmin())throw new Error('not admin');
+
+var CU=getCurrentUser();
+document.getElementById('sbUser').innerHTML=
+  '<div class="un">'+CU.name+'</div><div class="ur">Administrator</div>';
+
+setInterval(function(){
+  var el=document.getElementById('clock');
+  if(el)el.textContent=new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+},1000);
+
+// Data pesanan admin sudah hardcoded di DEMO_ORDERS di atas
+
+// -- NAVIGATION --
+function goSec(id,btn){
+  document.querySelectorAll('.admin-section').forEach(function(s){s.classList.remove('active');});
+  document.getElementById('sec_'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  var T={dashboard:'Dashboard',produk:'Produk',
+         pelanggan:'Pelanggan',ulasan:'Ulasan',laporan:'Laporan',pengaturan:'Pengaturan'};
+  document.getElementById('secTitle').textContent=T[id]||id;
+  if(id==='dashboard')renderDash();
+  else if(id==='produk')renderProds();
+  else if(id==='pelanggan')renderCust();
+  else if(id==='ulasan')renderRv();
+  else if(id==='laporan')renderLap();
+}
+
+// -- DASHBOARD --
+function statusClass(s){return{pending:'b-pending',process:'b-process',done:'b-done',cancel:'b-cancel'}[s]||'b-pending';}
+function statusLabel(s){return{pending:'Menunggu',process:'Diproses',done:'Selesai',cancel:'Batal'}[s]||s;}
+
+function changeStatus(id,val){
+  var orders=getOrders();
+  for(var i=0;i<orders.length;i++){if(orders[i].id===id){orders[i].status=val;break;}}
+  saveOrders(orders);
+  renderDash();
+  toast('Status diperbarui!','ok');
+}
+
+function renderDash(){
+  var orders=getOrders();
+  var rev=0,pend=0;
+  for(var i=0;i<orders.length;i++){
+    if(orders[i].status!=='cancel')rev+=orders[i].total||0;
+    if(orders[i].status==='pending')pend++;
+  }
+  var prods=getProducts(),activeProd=0;
+  for(var i=0;i<prods.length;i++){if(prods[i].active)activeProd++;}
+
+  document.getElementById('statsGrid').innerHTML=
+    '<div class="stat-card"><div class="sc-ico">&#128176;</div><div class="sc-val">'+rp(rev)+'</div><div class="sc-name">Total Pendapatan</div></div>'+
+    '<div class="stat-card"><div class="sc-ico">&#128230;</div><div class="sc-val">'+orders.length+'</div><div class="sc-name">Total Pesanan</div><div class="sc-sub">'+pend+' menunggu</div></div>'+
+    '<div class="stat-card"><div class="sc-ico">&#128101;</div><div class="sc-val">'+getUsers().length+'</div><div class="sc-name">Pelanggan</div></div>'+
+    '<div class="stat-card"><div class="sc-ico">&#127869;</div><div class="sc-val">'+activeProd+'</div><div class="sc-name">Produk Aktif</div></div>';
+
+  var recent=orders.slice(0,6);
+  if(recent.length===0){
+    document.getElementById('recentTbody').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px;">Belum ada pesanan</td></tr>';
+  } else {
+    var html='';
+    for(var i=0;i<recent.length;i++){
+      var o=recent[i];
+      var sel='<select onchange="changeStatus(\''+o.id+'\',this.value)" style="padding:5px 8px;border-radius:7px;border:1.5px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;">';
+      var sts=[['pending','Menunggu'],['process','Diproses'],['done','Selesai'],['cancel','Batal']];
+      for(var s=0;s<sts.length;s++)sel+='<option value="'+sts[s][0]+'"'+(o.status===sts[s][0]?' selected':'')+'>'+sts[s][1]+'</option>';
+      sel+='</select>';
+      html+='<tr>'+
+        '<td><strong style="color:var(--primary);">'+(o.id||'-')+'</strong><br>'+
+        '<span style="font-size:11px;color:var(--muted);">'+new Date(o.createdAt).toLocaleDateString('id-ID')+'</span></td>'+
+        '<td>'+(o.customerName||'Tamu')+'<br><span style="font-size:11px;color:var(--muted);">'+(o.phone||'')+'</span></td>'+
+        '<td>'+rp(o.total||0)+'</td>'+
+        '<td><span class="badge '+statusClass(o.status)+'">'+statusLabel(o.status)+'</span></td>'+
+        '<td>'+sel+'</td>'+
+        '</tr>';
+    }
+    document.getElementById('recentTbody').innerHTML=html;
+  }
+
+  var days=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  var vals=[4,7,5,9,12,15,8];
+  var mx=Math.max.apply(null,vals);var ws=0;var ch='';
+  for(var i=0;i<vals.length;i++){
+    ws+=vals[i]*35000;
+    ch+='<div class="chart-col"><div class="chart-bar" style="height:'+(Math.round(vals[i]/mx*64)+8)+'px;"></div><span class="chart-lbl">'+days[i]+'</span></div>';
+  }
+  document.getElementById('salesChart').innerHTML=ch;
+  document.getElementById('weekTot').textContent=rp(ws);
+
+  var pc={},pr={};
+  for(var i=0;i<orders.length;i++){
+    if(orders[i].status==='cancel'||!orders[i].items)continue;
+    for(var j=0;j<orders[i].items.length;j++){
+      var it=orders[i].items[j];
+      pc[it.name]=(pc[it.name]||0)+it.qty;
+      pr[it.name]=(pr[it.name]||0)+(it.price||0)*(it.qty||0);
+    }
+  }
+  var sorted=Object.entries(pc).sort(function(a,b){return b[1]-a[1];}).slice(0,5);
+  if(sorted.length===0){
+    document.getElementById('popTbody').innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--muted);padding:16px;">Belum ada data</td></tr>';
+  } else {
+    var html='';
+    for(var i=0;i<sorted.length;i++){
+      html+='<tr><td><strong style="color:var(--primary);">#'+(i+1)+'</strong></td>'+
+        '<td>'+sorted[i][0]+'</td><td><strong>'+sorted[i][1]+' pcs</strong></td>'+
+        '<td style="color:var(--ok);font-weight:800;">'+rp(pr[sorted[i][0]]||0)+'</td></tr>';
+    }
+    document.getElementById('popTbody').innerHTML=html;
+  }
+}
+
+// -- PRODUK --
+var _editProdId=null;
+function renderProds(){
+  var ps=getProducts();var html='';
+  for(var i=0;i<ps.length;i++){
+    var p=ps[i];
+    html+='<div class="prod-adm">'+
+      '<div class="prod-adm-img">'+(p.photo?'<img src="'+p.photo+'" alt="'+p.name+'" onerror="this.style.display=\'none\'">':'')+
+      '<span style="font-size:44px;'+(p.photo?'display:none':'')+'">'+p.emoji+'</span></div>'+
+      '<div class="prod-adm-body">'+
+      '<div class="prod-adm-name">'+p.name+'</div>'+
+      '<div class="prod-adm-price">'+rp(p.price)+' <small style="color:var(--muted);font-size:10px;">'+p.unit+'</small></div>'+
+      '<div style="margin-top:5px;">'+(p.active?'<span class="badge b-active">Aktif</span>':'<span class="badge b-off">Nonaktif</span>')+'</div>'+
+      '<div class="prod-adm-actions">'+
+      '<button class="btn-sm btn-edit" onclick="openProdForm('+p.id+')">Edit</button>'+
+      '<button class="btn-sm '+(p.active?'btn-del':'btn-ok')+'" onclick="toggleProd('+p.id+')">'+(p.active?'Off':'On')+'</button>'+
+      '</div></div></div>';
+  }
+  document.getElementById('prodGrid').innerHTML=html;
+}
+function openProdForm(id){
+  _editProdId=id||null;
+  document.getElementById('prodModalTitle').textContent=id?'Edit Produk':'+ Tambah Produk';
+  if(id){
+    var ps=getProducts();var p=null;
+    for(var i=0;i<ps.length;i++){if(ps[i].id===id){p=ps[i];break;}}
+    if(p){
+      document.getElementById('pf_name').value=p.name;
+      document.getElementById('pf_price').value=p.price;
+      document.getElementById('pf_unit').value=p.unit;
+      document.getElementById('pf_emoji').value=p.emoji;
+      document.getElementById('pf_badge').value=p.badge||'';
+      document.getElementById('pf_desc').value=p.desc;
+      document.getElementById('pf_photo').value=p.photo||'';
+      document.getElementById('pf_active').checked=p.active!==false;
+    }
+  } else {
+    ['pf_name','pf_price','pf_unit','pf_emoji','pf_desc','pf_photo'].forEach(function(x){document.getElementById(x).value='';});
+    document.getElementById('pf_badge').value='';
+    document.getElementById('pf_active').checked=true;
+  }
+  document.getElementById('prodModal').classList.add('open');
+}
+function closeProdForm(){document.getElementById('prodModal').classList.remove('open');}
+function saveProd(){
+  var name=document.getElementById('pf_name').value.trim();
+  var price=parseInt(document.getElementById('pf_price').value)||0;
+  var desc=document.getElementById('pf_desc').value.trim();
+  if(!name||!price||!desc){toast('Nama, harga, deskripsi wajib diisi!','err');return;}
+  var ps=getProducts();
+  var d={name:name,price:price,desc:desc,
+    unit:document.getElementById('pf_unit').value||'per pcs',
+    emoji:document.getElementById('pf_emoji').value||'',
+    badge:document.getElementById('pf_badge').value||null,
+    photo:document.getElementById('pf_photo').value||'',
+    active:document.getElementById('pf_active').checked};
+  if(_editProdId){
+    for(var i=0;i<ps.length;i++){if(ps[i].id===_editProdId){Object.assign(ps[i],d);break;}}
+  } else {
+    var mx=0;for(var i=0;i<ps.length;i++){if(ps[i].id>mx)mx=ps[i].id;}
+    ps.push(Object.assign({id:mx+1},d));
+  }
+  saveProducts(ps);closeProdForm();renderProds();
+  toast('Produk disimpan!','ok');
+}
+function toggleProd(id){
+  var ps=getProducts();
+  for(var i=0;i<ps.length;i++){if(ps[i].id===id){ps[i].active=!ps[i].active;break;}}
+  saveProducts(ps);renderProds();
+  toast('Status produk diperbarui!','ok');
+}
+
+// -- PELANGGAN --
+function renderCust(){
+  var us=getUsers();var os=getOrders();
+  var cc=document.getElementById('custCount');if(cc)cc.textContent=us.length+' terdaftar';
+  if(us.length===0){document.getElementById('custTbody').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:22px;">Belum ada pelanggan</td></tr>';return;}
+  var html='';
+  for(var i=0;i<us.length;i++){
+    var u=us[i];var uo=[];var ts=0;
+    for(var j=0;j<os.length;j++){if(os[j].customerName===u.name&&os[j].status!=='cancel'){uo.push(os[j]);ts+=os[j].total||0;}}
+    html+='<tr><td><strong>'+u.name+'</strong></td><td>'+u.email+'</td>'+
+      '<td>'+new Date(u.createdAt||'').toLocaleDateString('id-ID',{day:'numeric',month:'short',year:'numeric'})+'</td>'+
+      '<td>'+uo.length+' pesanan</td><td style="color:var(--ok);font-weight:800;">'+rp(ts)+'</td></tr>';
+  }
+  document.getElementById('custTbody').innerHTML=html;
+}
+
+// -- ULASAN --
+function renderRv(){
+  var rv=DEMO_REVIEWS.slice(); // Data ulasan statis untuk presentasi
+  if(rv.length===0){document.getElementById('rvTbody').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:22px;">Belum ada ulasan</td></tr>';return;}
+  var html='';
+  for(var i=0;i<rv.length;i++){
+    var r=rv[i];
+    html+='<tr><td><strong>'+r.nama+'</strong></td><td>'+r.produk+'</td>'+
+      '<td>'+'★'.repeat(r.rating)+'</td>'+
+      '<td style="max-width:200px;font-size:12px;">'+r.text+'</td>'+
+      '<td>'+(r.date||'')+'</td>'+
+      '<td><div style="display:flex;gap:4px;">'+
+      '<button class="btn-sm btn-ok" onclick="verifyRv(\''+r.id+'\')" '+(r.verified?'disabled style="opacity:.5;"':'')+'>'+
+      (r.verified?'Terverifikasi':'Verifikasi')+'</button>'+
+      '<button class="btn-sm btn-del" onclick="deleteRv(\''+r.id+'\')">Hapus</button>'+
+      '</div></td></tr>';
+  }
+  document.getElementById('rvTbody').innerHTML=html;
+}
+function verifyRv(id){
+  for(var i=0;i<DEMO_REVIEWS.length;i++){if(DEMO_REVIEWS[i].id===id){DEMO_REVIEWS[i].verified=true;break;}}
+  renderRv();toast('Ulasan diverifikasi!','ok');
+}
+function deleteRv(id){
+  if(!confirm('Hapus ulasan ini?'))return;
+  for(var i=0;i<DEMO_REVIEWS.length;i++){if(DEMO_REVIEWS[i].id===id){DEMO_REVIEWS.splice(i,1);break;}}
+  renderRv();toast('Ulasan dihapus','');
+}
+
+// -- LAPORAN --
+function renderLap(){
+  var os=getOrders().filter(function(o){return o.status!=='cancel';});
+  var now=new Date();
+  var tod=os.filter(function(o){return new Date(o.createdAt).toDateString()===now.toDateString();});
+  var mon=os.filter(function(o){var d=new Date(o.createdAt);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();});
+  var sum=function(arr){var s=0;for(var i=0;i<arr.length;i++)s+=arr[i].total||0;return s;};
+  document.getElementById('lapStats').innerHTML=
+    '<div class="stat-card"><div class="sc-ico">&#128197;</div><div class="sc-val">'+tod.length+'</div><div class="sc-name">Pesanan Hari Ini</div><div class="sc-sub">'+rp(sum(tod))+'</div></div>'+
+    '<div class="stat-card"><div class="sc-ico">&#128467;</div><div class="sc-val">'+mon.length+'</div><div class="sc-name">Bulan Ini</div><div class="sc-sub">'+rp(sum(mon))+'</div></div>'+
+    '<div class="stat-card"><div class="sc-ico">&#128176;</div><div class="sc-val">'+rp(sum(os))+'</div><div class="sc-name">Total Pendapatan</div></div>'+
+    '<div class="stat-card"><div class="sc-ico">&#128202;</div><div class="sc-val">'+rp(os.length?Math.round(sum(os)/os.length):0)+'</div><div class="sc-name">Rata-rata Pesanan</div></div>';
+  document.getElementById('lapTbody').innerHTML=
+    '<tr><td>Hari Ini</td><td>'+tod.length+'</td><td style="color:var(--ok);font-weight:800;">'+rp(sum(tod))+'</td></tr>'+
+    '<tr><td>Bulan Ini</td><td>'+mon.length+'</td><td style="color:var(--ok);font-weight:800;">'+rp(sum(mon))+'</td></tr>'+
+    '<tr><td>Semua Waktu</td><td>'+os.length+'</td><td style="color:var(--ok);font-weight:800;">'+rp(sum(os))+'</td></tr>';
+  var pc={};
+  for(var i=0;i<os.length;i++){if(!os[i].items)continue;for(var j=0;j<os[i].items.length;j++){var it=os[i].items[j];pc[it.name]=(pc[it.name]||0)+it.qty;}}
+  var sorted=Object.entries(pc).sort(function(a,b){return b[1]-a[1];}).slice(0,6);
+  var mxv=sorted.length>0?sorted[0][1]:1;
+  var lapHtml=sorted.length===0?'<p style="font-size:13px;color:var(--muted);">Belum ada data.</p>':'';
+  for(var i=0;i<sorted.length;i++){lapHtml+='<div style="margin-bottom:11px;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:3px;"><span>'+sorted[i][0]+'</span><strong>'+sorted[i][1]+' pcs</strong></div><div style="height:7px;background:var(--border);border-radius:99px;"><div style="height:100%;width:'+Math.round(sorted[i][1]/mxv*100)+'%;background:var(--primary);border-radius:99px;"></div></div></div>';}
+  document.getElementById('lapProd').innerHTML=lapHtml;
+}
+
+// -- PENGATURAN --
+function saveShop(){
+  dbSet('dma_shop',{nama:document.getElementById('st_nama').value,wa:document.getElementById('st_wa').value,jam:document.getElementById('st_jam').value,ongkir:document.getElementById('st_ongkir').value});
+  toast('Pengaturan disimpan!','ok');
+}
+function saveCreds(){
+  var name=document.getElementById('new_name').value.trim();
+  var email=document.getElementById('new_email').value.trim();
+  var pass=document.getElementById('new_pass').value;
+  var pass2=document.getElementById('new_pass2').value;
+  if(!name||!email){toast('Nama dan email wajib!','err');return;}
+  if(pass&&pass!==pass2){toast('Password tidak cocok!','err');return;}
+  if(pass&&pass.length<6){toast('Password min 6 karakter!','err');return;}
+  var saved=dbGet('dma_admin_creds')||{};
+  dbSet('dma_admin_creds',{name:name,email:email,password:pass||saved.password||'Admin123!'});
+  var u=getCurrentUser();if(u){u.name=name;u.email=email;setCurrentUser(u);}
+  document.getElementById('sbUser').innerHTML='<div class="un">'+name+'</div><div class="ur">Administrator</div>';
+  toast('Kredensial diperbarui!','ok');
+}
+function savePay(){
+  dbSet('dma_pay',{nama:document.getElementById('pay_nama').value,bca:document.getElementById('pay_bca').value,bni:document.getElementById('pay_bni').value});
+  toast('Info rekening disimpan!','ok');
+}
+function exportData(type){
+  var data=type==='orders'?getOrders():getUsers().map(function(u){var c=Object.assign({},u);delete c.password;return c;});
+  var a=document.createElement('a');
+  a.href='data:text/json;charset=utf-8,'+encodeURIComponent(JSON.stringify(data,null,2));
+  a.download=type+'-dapur-mama-arya.json';a.click();
+}
+function resetOrders(){
+  if(!confirm('Reset status semua pesanan ke default?'))return;
+  var defaults=['done','done','done','process','pending','pending'];
+  for(var i=0;i<DEMO_ORDERS.length;i++){if(defaults[i])DEMO_ORDERS[i].status=defaults[i];}
+  renderDash();toast('Status pesanan direset!','ok');
+}
+
+// Load saved settings
+(function(){
+  var shop=dbGet('dma_shop')||{};
+  if(shop.nama)document.getElementById('st_nama').value=shop.nama;
+  if(shop.wa)document.getElementById('st_wa').value=shop.wa;
+  if(shop.jam)document.getElementById('st_jam').value=shop.jam;
+  if(shop.ongkir)document.getElementById('st_ongkir').value=shop.ongkir;
+  var pay=dbGet('dma_pay')||{};
+  if(pay.nama)document.getElementById('pay_nama').value=pay.nama;
+  if(pay.bca)document.getElementById('pay_bca').value=pay.bca;
+  if(pay.bni)document.getElementById('pay_bni').value=pay.bni;
+  var cred=dbGet('dma_admin_creds')||{};
+  if(cred.name)document.getElementById('new_name').value=cred.name;
+  if(cred.email)document.getElementById('new_email').value=cred.email;
+})();
+
+renderDash();
+</script>
+</body>
+</html>

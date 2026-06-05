@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ulasan Pelanggan — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.rating-box{background:#fff;border:1px solid var(--border);border-radius:18px;padding:28px;display:flex;gap:36px;align-items:center;flex-wrap:wrap;margin-bottom:32px;}
+.rating-big{text-align:center;flex-shrink:0;}
+.rating-big .rb-num{font-size:62px;font-weight:800;color:var(--primary);line-height:1;}
+.rating-big .rb-stars{font-size:20px;margin:6px 0;}
+.rating-big .rb-count{font-size:13px;color:var(--muted);}
+.rb-bars{flex:1;min-width:180px;}
+.rb-row{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.rb-lbl{font-size:12px;color:var(--muted);width:30px;flex-shrink:0;}
+.rb-bg{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden;}
+.rb-fill{height:100%;background:var(--primary);border-radius:99px;}
+.rb-pct{font-size:11px;color:var(--muted);width:34px;text-align:right;flex-shrink:0;}
+.rv-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;transition:all .2s;}
+.rv-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.08);}
+.rv-head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:9px;}
+.rv-produk{font-size:11px;font-weight:800;background:var(--primary-lt);color:var(--primary);padding:3px 9px;border-radius:99px;}
+.rv-date{font-size:11px;color:var(--muted);}
+.rv-text{font-size:14px;line-height:1.65;color:var(--text);margin-bottom:11px;font-style:italic;}
+.rv-foot{display:flex;align-items:center;justify-content:space-between;}
+.rv-verified{font-size:11px;color:var(--ok);font-weight:700;}
+.rv-form{background:#fff;border:1px solid var(--border);border-radius:18px;padding:26px;margin-bottom:28px;display:none;}
+.rv-form h3{font-size:16px;font-weight:800;color:var(--brown);margin-bottom:16px;}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>⭐ Ulasan Pelanggan</h1>
+  <p>Lebih dari 200 ulasan jujur dari pelanggan setia kami</p>
+</div>
+
+<div class="section" style="padding-top:32px;">
+
+  <!-- Rating Summary -->
+  <div class="rating-box">
+    <div class="rating-big">
+      <div class="rb-num">4.9</div>
+      <div class="rb-stars">⭐⭐⭐⭐⭐</div>
+      <div class="rb-count">Dari 234 ulasan</div>
+    </div>
+    <div class="rb-bars">
+      <div class="rb-row"><span class="rb-lbl">5⭐</span><div class="rb-bg"><div class="rb-fill" style="width:88%"></div></div><span class="rb-pct">88%</span></div>
+      <div class="rb-row"><span class="rb-lbl">4⭐</span><div class="rb-bg"><div class="rb-fill" style="width:8%"></div></div><span class="rb-pct">8%</span></div>
+      <div class="rb-row"><span class="rb-lbl">3⭐</span><div class="rb-bg"><div class="rb-fill" style="width:3%"></div></div><span class="rb-pct">3%</span></div>
+      <div class="rb-row"><span class="rb-lbl">2⭐</span><div class="rb-bg"><div class="rb-fill" style="width:1%"></div></div><span class="rb-pct">1%</span></div>
+      <div class="rb-row"><span class="rb-lbl">1⭐</span><div class="rb-bg"><div class="rb-fill" style="width:0%"></div></div><span class="rb-pct">0%</span></div>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:9px;">Sudah pernah pesan?</div>
+      <button class="btn btn-primary" onclick="showForm()">✏️ Tulis Ulasan</button>
+    </div>
+  </div>
+
+  <!-- Form Ulasan -->
+  <div class="rv-form" id="rvForm">
+    <h3>✏️ Tulis Ulasan Kamu</h3>
+    <div class="form-group"><label>Nama</label><input id="rv_nama" readonly></div>
+    <div class="form-group"><label>Produk yang Diulas *</label>
+      <select id="rv_produk"><option value="">Pilih produk...</option></select></div>
+    <div class="form-group">
+      <label>Rating *</label>
+      <div class="star-pick" id="starPick">
+        <span onclick="setRating(1)">⭐</span><span onclick="setRating(2)">⭐</span>
+        <span onclick="setRating(3)">⭐</span><span onclick="setRating(4)">⭐</span>
+        <span onclick="setRating(5)">⭐</span>
+      </div>
+    </div>
+    <div class="form-group"><label>Ulasan *</label>
+      <textarea id="rv_text" placeholder="Ceritakan pengalaman belanja kamu..." rows="4"></textarea></div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-primary" onclick="submitReview()">Kirim Ulasan ✓</button>
+      <button class="btn btn-outline" onclick="document.getElementById('rvForm').style.display='none'">Batal</button>
+    </div>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterRv('semua',this)">Semua</button>
+    <button class="filter-btn" onclick="filterRv('5',this)">⭐⭐⭐⭐⭐</button>
+    <button class="filter-btn" onclick="filterRv('4',this)">⭐⭐⭐⭐</button>
+    <button class="filter-btn" onclick="filterRv('risol',this)">Risol</button>
+    <button class="filter-btn" onclick="filterRv('donat',this)">Donat</button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;" id="rvGrid"></div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;">🍩 Dapur Mama Arya</div>
+        <p>UMKM kuliner rumahan terbaik di Kepulauan Riau.</p>
+      </div>
+      <div class="footer-col"><h4>Halaman</h4>
+        <a href="index.html">Beranda</a><a href="produk.html">Produk</a><a href="kontak.html">Kontak</a>
+      </div>
+      <div class="footer-col"><h4>Kontak</h4>
+        <a href="#">📱 0812-3456-7890</a><a href="#">🕐 07.00–20.00</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Dapur Mama Arya · Dibuat dengan ❤️ di Tanjung Pinang</div>
+  </div>
+</footer>
+<a class="wa-float" href="https://wa.me/6281234567890" target="_blank">💬 WhatsApp</a>
+<div class="toast" id="toast"></div>
+
+<script src="auth.js"></script>
+<script src="data.js"></script>
+<script src="navbar.js"></script>
+<script>
+renderNavbar('ulasan');
+renderCartSidebar();
+
+var STATIC_RV = [
+  {id:'s1',nama:'Sari Rahmawati',loc:'Tanjung Pinang',produk:'Risol Mayo Original',rating:5,text:'Risol mayonya JUARA banget! Isinya banyak, kulitnya tipis renyah. Udah langganan tiap minggu!',date:'20 Mei 2026',verified:true},
+  {id:'s2',nama:'Budi Hartono',loc:'Bintan',produk:'Donat Coklat Meses',rating:5,text:'Donat coklatnya lembut banget, ga keras kayak yang beli di toko. Anak-anak suka banget!',date:'18 Mei 2026',verified:true},
+  {id:'s3',nama:'Dewi Lestari',loc:'Batam',produk:'Paket Mix 20 Pcs',rating:5,text:'Pesen buat arisan 50 pcs, semua teman-teman suka. Harga terjangkau, rasa enak, packaging rapi!',date:'15 Mei 2026',verified:true},
+  {id:'s4',nama:'Ahmad Fauzi',loc:'Tanjung Pinang',produk:'Risol Keju Mozarella',rating:5,text:'Kejunya banyak dan meleleh pas digigit. Jadi favorit baru di keluarga kami!',date:'12 Mei 2026',verified:true},
+  {id:'s5',nama:'Linda Susanti',loc:'Tanjungpinang Timur',produk:'Donat Matcha',rating:5,text:'Donat matcha-nya kekinian tapi tetap ada cita rasa rumahan. Tidak terlalu manis, perfect!',date:'10 Mei 2026',verified:true},
+  {id:'s6',nama:'Rizky Ananda',loc:'Bukit Bestari',produk:'Paket Risol 10 Pcs',rating:4,text:'Paket risol sangat worth it! Rasanya konsisten enak setiap pesan.',date:'8 Mei 2026',verified:true},
+  {id:'s7',nama:'Yanti Pratiwi',loc:'Tanjungpinang Barat',produk:'Donat Strawberry',rating:5,text:'Pesen buat ultah anak, donatnya habis sebelum tiup lilin haha. Seger dan manisnya pas!',date:'5 Mei 2026',verified:true},
+  {id:'s8',nama:'Hendra Kurniawan',loc:'Bintan Utara',produk:'Risol Telur + Sosis',rating:5,text:'Kombinasi telur dan sosis di dalamnya pas banget. Kulit renyah, dalamnya juicy. Recommended!',date:'1 Mei 2026',verified:true},
+];
+
+var _rvFilter = 'semua';
+var _rating = 0;
+
+function getAllRv(){
+  var saved = JSON.parse(localStorage.getItem('dma_reviews')||'[]');
+  return saved.concat(STATIC_RV);
+}
+
+function filterRv(f, btn){
+  _rvFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderRv();
+}
+
+function renderRv(){
+  var rv = getAllRv();
+  if(_rvFilter==='5') rv=rv.filter(function(r){return r.rating===5;});
+  else if(_rvFilter==='4') rv=rv.filter(function(r){return r.rating===4;});
+  else if(_rvFilter==='risol') rv=rv.filter(function(r){return r.produk.toLowerCase().includes('risol');});
+  else if(_rvFilter==='donat') rv=rv.filter(function(r){return r.produk.toLowerCase().includes('donat');});
+
+  document.getElementById('rvGrid').innerHTML = rv.map(function(r){
+    return '<div class="rv-card">'
+      +'<div class="rv-head"><span class="rv-produk">'+r.produk+'</span><span class="rv-date">'+r.date+'</span></div>'
+      +'<div style="font-size:15px;margin-bottom:7px;">'+'⭐'.repeat(r.rating)+'</div>'
+      +'<p class="rv-text">"'+r.text+'"</p>'
+      +'<div class="rv-foot">'
+      +'<div class="testi-author"><div class="avatar">'+r.nama[0].toUpperCase()+'</div>'
+      +'<div><div class="author-name">'+r.nama+'</div><div class="author-loc">📍 '+(r.loc||'')+'</div></div></div>'
+      +(r.verified?'<span class="rv-verified">✅ Terverifikasi</span>':'')
+      +'</div></div>';
+  }).join('');
+}
+
+function showForm(){
+  var user = getCurrentUser();
+  if(!user){if(confirm('Login dulu untuk menulis ulasan.\nKlik OK ke login.')){window.location.href='login.html';}return;}
+  var form = document.getElementById('rvForm');
+  form.style.display = 'block';
+  form.scrollIntoView({behavior:'smooth'});
+  document.getElementById('rv_nama').value = user.name;
+  var sel = document.getElementById('rv_produk');
+  sel.innerHTML = '<option value="">Pilih produk...</option>'
+    + getActiveProducts().map(function(p){return '<option>'+p.name+'</option>';}).join('');
+}
+
+function setRating(n){
+  _rating=n;
+  document.querySelectorAll('#starPick span').forEach(function(s,i){s.classList.toggle('lit',i<n);});
+}
+
+function submitReview(){
+  var produk = document.getElementById('rv_produk').value;
+  var text = document.getElementById('rv_text').value.trim();
+  if(!produk||!text||!_rating){showToast('⚠️ Lengkapi semua kolom!','err');return;}
+  var user = getCurrentUser();
+  var rv = {
+    id:'r_'+Date.now(), nama:user.name, loc:'Tanjung Pinang',
+    produk:produk, rating:_rating, text:text,
+    date:new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'}),
+    verified:false, userId:user.id
+  };
+  var saved = JSON.parse(localStorage.getItem('dma_reviews')||'[]');
+  saved.unshift(rv);
+  localStorage.setItem('dma_reviews',JSON.stringify(saved));
+  document.getElementById('rvForm').style.display='none';
+  document.getElementById('rv_text').value='';
+  _rating=0;
+  document.querySelectorAll('#starPick span').forEach(function(s){s.classList.remove('lit');});
+  renderRv();
+  showToast('✅ Ulasan berhasil dikirim!','ok');
+}
+
+renderRv();
+</script>
+</body>
+</html>

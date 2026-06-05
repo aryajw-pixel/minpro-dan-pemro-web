@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pesanan Saya — Dapur Mama Arya</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.tab-bar{display:flex;gap:4px;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:22px;}
+.tab-btn{flex:1;padding:9px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);border-radius:8px;cursor:pointer;border:none;background:none;transition:all .2s;}
+.tab-btn.active{background:#fff;color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+</style>
+</head>
+<body>
+<div class="page-header">
+  <h1>📦 Pesanan Saya</h1>
+  <p>Pantau status dan riwayat semua pesananmu</p>
+</div>
+
+<div class="section" style="padding-top:32px;">
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="setTab('semua',this)">Semua</button>
+    <button class="tab-btn" onclick="setTab('pending',this)">Menunggu</button>
+    <button class="tab-btn" onclick="setTab('process',this)">Diproses</button>
+    <button class="tab-btn" onclick="setTab('done',this)">Selesai</button>
+  </div>
+  <div id="ordersWrap"></div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand"><div style="display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;">🍩 Dapur Mama Arya</div><p>UMKM kuliner rumahan terbaik di Kepulauan Riau.</p></div>
+      <div class="footer-col"><h4>Halaman</h4><a href="index.html">Beranda</a><a href="produk.html">Produk</a><a href="kontak.html">Kontak</a></div>
+      <div class="footer-col"><h4>Akun</h4><a href="pesanan.html">Pesanan Saya</a><a href="#" onclick="logout()">Keluar</a></div>
+    </div>
+    <div class="footer-bottom">© 2026 Dapur Mama Arya · Dibuat dengan ❤️ di Tanjung Pinang</div>
+  </div>
+</footer>
+
+<script src="auth.js"></script>
+<script src="data.js"></script>
+<script src="navbar.js"></script>
+<script>
+if(!requireLogin())throw new Error('not logged in');
+renderNavbar('');
+renderCartSidebar();
+
+var user=getCurrentUser();
+var _tab='semua';
+var SL={pending:'<span class="badge b-pending">⏳ Menunggu</span>',process:'<span class="badge b-process">🔄 Diproses</span>',done:'<span class="badge b-done">✅ Selesai</span>',cancel:'<span class="badge b-cancel">❌ Batal</span>'};
+var PL={bca:'Transfer BCA',bni:'Transfer BNI',qris:'QRIS',cod:'COD'};
+
+function setTab(t,btn){
+  _tab=t;
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderOrders();
+}
+
+function renderOrders(){
+  var all=JSON.parse(localStorage.getItem('dma_my_orders')||'[]').filter(function(o){return o.customerId===user.id;});
+  var list=_tab==='semua'?all:all.filter(function(o){return o.status===_tab;});
+  var wrap=document.getElementById('ordersWrap');
+  if(list.length===0){
+    wrap.innerHTML='<div class="empty-state"><div class="ei">📦</div><p>'+(_tab==='semua'?'Kamu belum pernah pesan.<br>Yuk mulai belanja!':'Tidak ada pesanan dengan status ini.')+'</p>'
+      +(_tab==='semua'?'<a href="produk.html" class="btn btn-primary" style="margin-top:14px;display:inline-flex;">🛒 Pesan Sekarang</a>':'')+'</div>';
+    return;
+  }
+  wrap.innerHTML=list.map(function(o){
+    var dt=new Date(o.createdAt).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    return '<div class="order-card">'
+      +'<div class="order-head"><div><div class="order-id">'+o.id+'</div><div style="font-size:11px;color:var(--muted);">'+dt+'</div></div>'+(SL[o.status]||'')+'</div>'
+      +'<div class="order-body"><div class="order-items">'
+      +o.items.map(function(i){return '<div class="order-item-row"><span>'+i.emoji+' '+i.name+' × '+i.qty+'</span><span>'+rp(i.price*i.qty)+'</span></div>';}).join('')
+      +'<div class="order-item-row"><span>🚴 Ongkos Kirim</span><span>Rp 5.000</span></div>'
+      +'</div>'
+      +'<div style="font-size:12px;color:var(--muted);margin-top:9px;display:flex;gap:14px;flex-wrap:wrap;">'
+      +'<span>📍 '+o.district+'</span><span>🕐 '+o.deliveryTime+'</span><span>💳 '+(PL[o.payment]||o.payment)+'</span></div>'
+      +'</div>'
+      +'<div class="order-foot">'
+      +'<div style="font-size:15px;font-weight:800;">Total: <span style="color:var(--primary);">'+rp(o.total)+'</span></div>'
+      +'<div style="display:flex;gap:7px;">'
+      +'<a href="https://wa.me/6285167201891?text=Halo%2C%20tanya%20pesanan%20'+o.id+'" target="_blank" class="btn-sm btn-ok">💬 Tanya Status</a>'
+      +(o.status==='pending'&&o.payment!=='cod'?'<a href="https://wa.me/6285167201891?text=Konfirmasi%20bayar%20'+o.id+'" target="_blank" class="btn-sm btn-edit">📤 Konfirmasi</a>':'')
+      +'</div></div></div>';
+  }).join('');
+}
+renderOrders();
+</script>
+</body>
+</html>
